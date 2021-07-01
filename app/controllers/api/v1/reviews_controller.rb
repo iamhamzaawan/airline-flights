@@ -1,5 +1,5 @@
-module v1
-  module api
+module Api
+  module V1
     class ReviewsController < ApplicationController
       before_action :find_review, only: [:destroy]
 
@@ -15,7 +15,7 @@ module v1
 
       def destroy
         if @review.destroy
-          head :no_content
+          render json: { message: "Deleted Successfully" }
         else
           render json: { error: @review.errors.full_messages }, status: 422
         end
@@ -23,11 +23,12 @@ module v1
 
       private
         def find_review
-          @review = Reviews.find(params[:id]) if params[:id]
+          @review = Review.find(params[:id]) if params[:id]
+          render json: { error: ["Review not found"] }, status: 404 if @review.blank?
         end
 
         def reviews_params
-          params.require(:airline).permit(:title, :description, :score, :airline_id)
+          params.require(:review).permit(:title, :description, :score, :airline_id)
         end
     end
   end
