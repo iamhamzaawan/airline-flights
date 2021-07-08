@@ -4,7 +4,7 @@ module Api
       before_action :find_airline, only: [:show, :update,  :destroy]
       
       def index
-        airlines = Airline.all
+        airlines = Airline.all.order(:id)
 
         render json: AirlineSerializer.new(airlines).serialized_json
       end
